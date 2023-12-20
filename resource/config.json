@@ -1,0 +1,11 @@
+{
+  "width": 640,
+  "hight": 480,
+  "title":"hello world",
+  "bgColor":{
+    "r": 230,
+    "g": 230,
+    "b": 230,
+    "a": 255
+  }
+}
