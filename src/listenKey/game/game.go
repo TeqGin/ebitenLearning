@@ -2,12 +2,12 @@ package game
 
 import (
 	"github.com/hajimehoshi/ebiten/v2"
-	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
 )
 
 type Game struct {
 	i   *input
 	cfg *config
+	p   *plane
 }
 
 type input struct {
@@ -15,9 +15,13 @@ type input struct {
 }
 
 func NewGame() *Game {
+	cfg := loadConfig()
+	ebiten.SetWindowSize(cfg.Width, cfg.Hight)
+	ebiten.SetWindowTitle(cfg.Title)
 	return &Game{
 		i:   &input{},
-		cfg: loadConfig(),
+		cfg: cfg,
+		p:   loadPlane("./resource/airplane/plane/plane1.png", cfg),
 	}
 }
 
@@ -29,20 +33,22 @@ func (i *input) update() {
 	} else if ebiten.IsKeyPressed(ebiten.KeySpace) {
 		i.msg = "go space"
 	}
+
 }
 
 // update the running data
 func (g *Game) Update() error {
-	g.i.update()
+	g.p.update(g.cfg)
 	return nil
 }
 
 func (g *Game) Draw(screen *ebiten.Image) {
 	screen.Fill(g.cfg.BgColor)
-	ebitenutil.DebugPrint(screen, g.i.msg)
+	g.p.Draw(screen, g.cfg)
+	// ebitenutil.DebugPrint(screen, g.i.msg)
 }
 
 // logic size, use to zoom in/out the screen
 func (g *Game) Layout(outsideWidth, outsideHeight int) (screenWidth, screenHeight int) {
-	return 640 / 2, 480 / 2
+	return g.cfg.Width, g.cfg.Hight
 }

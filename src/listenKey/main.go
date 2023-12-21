@@ -8,9 +8,7 @@ import (
 )
 
 func main() {
-	g := game.NewGame()
-	ebiten.SetWindowSize(640, 480)
-	if err := ebiten.RunGame(g); err != nil {
+	if err := ebiten.RunGame(game.NewGame()); err != nil {
 		log.Fatal(err)
 	}
 }
