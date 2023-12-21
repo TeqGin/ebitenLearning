@@ -33,7 +33,6 @@ func (i *input) update() {
 	} else if ebiten.IsKeyPressed(ebiten.KeySpace) {
 		i.msg = "go space"
 	}
-
 }
 
 // update the running data
