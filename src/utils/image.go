@@ -1,6 +1,8 @@
 package utils
 
 import (
+	"bytes"
+	"ebitenLearning/src/resource"
 	"fmt"
 	"image"
 	"os"
@@ -19,6 +21,18 @@ func ResizeImageFromFile(path string, scalar float64) image.Image {
 
 	// Decode the original image
 	originalImg, _, err := image.Decode(file)
+	if err != nil {
+		fmt.Println("Error decoding image:", err)
+		return nil
+	}
+	return ResizeImage(originalImg, scalar)
+}
+
+func ResizeImageFromReader(path string, scalar float64) image.Image {
+
+	b, _ := resource.Asset(path)
+	// Decode the original image
+	originalImg, _, err := image.Decode(bytes.NewReader(b))
 	if err != nil {
 		fmt.Println("Error decoding image:", err)
 		return nil

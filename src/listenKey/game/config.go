@@ -1,10 +1,11 @@
 package game
 
 import (
+	"bytes"
+	"ebitenLearning/src/resource"
 	"encoding/json"
 	"image/color"
 	"log"
-	"os"
 )
 
 type config struct {
@@ -15,15 +16,13 @@ type config struct {
 }
 
 func loadConfig() *config {
-	f, err := os.Open("./resource/config.json")
-	if err != nil {
-		log.Fatalf("open config failed: %v", err)
-	}
-
 	var cfg config
-	err = json.NewDecoder(f).Decode(&cfg)
+	configBytes, err := resource.Asset("resource/config.json")
 	if err != nil {
-		log.Fatalf("decode config failed: %v", err)
+		log.Fatal(err)
+	}
+	if err := json.NewDecoder(bytes.NewReader(configBytes)).Decode(&cfg); err != nil {
+		log.Fatalf("json.Decode failed: %v\n", err)
 	}
 
 	return &cfg

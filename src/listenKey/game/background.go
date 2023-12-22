@@ -1,6 +1,8 @@
 package game
 
 import (
+	"bytes"
+	"ebitenLearning/src/resource"
 	"log"
 
 	_ "image/jpeg"
@@ -19,7 +21,8 @@ type background struct {
 }
 
 func loadBackground(path string) *background {
-	img, _, err := ebitenutil.NewImageFromFile(path)
+	b, _ := resource.Asset("resource/background/bg1.jpg")
+	img, _, err := ebitenutil.NewImageFromReader(bytes.NewReader(b))
 	if err != nil {
 		log.Fatal(err)
 	}

@@ -17,7 +17,7 @@ type plane struct {
 
 func loadPlane(path string, cfg *config) *plane {
 	// img, _, err := ebitenutil.NewImageFromFile(path)
-	img := utils.ResizeImageFromFile(path, 0.5)
+	img := utils.ResizeImageFromReader(path, 0.5)
 	if img == nil {
 		log.Fatal("resize image failed")
 	}
