@@ -8,11 +8,12 @@ import (
 )
 
 type plane struct {
-	image *ebiten.Image
-	x     float64
-	y     float64
-	live  int
-	speed float64
+	image   *ebiten.Image
+	x       float64
+	y       float64
+	bullets []*bullet
+	live    int
+	speed   float64
 }
 
 func loadPlane(path string, cfg *config) *plane {
@@ -23,11 +24,12 @@ func loadPlane(path string, cfg *config) *plane {
 	}
 
 	return &plane{
-		image: ebiten.NewImageFromImage(img),
-		x:     float64(cfg.Width-img.Bounds().Dx()) / 2,
-		y:     float64(cfg.Hight - img.Bounds().Dy()),
-		live:  50,
-		speed: 5,
+		image:   ebiten.NewImageFromImage(img),
+		x:       float64(cfg.Width-img.Bounds().Dx()) / 2,
+		y:       float64(cfg.Hight - img.Bounds().Dy()),
+		live:    50,
+		speed:   5,
+		bullets: make([]*bullet, 0, 50),
 	}
 }
 
@@ -35,6 +37,9 @@ func (p *plane) Draw(screen *ebiten.Image, cfg *config) {
 	op := &ebiten.DrawImageOptions{}
 	op.GeoM.Translate(p.x, p.y)
 	screen.DrawImage(p.image, op)
+	for _, bullet := range p.bullets {
+		bullet.draw(screen, cfg)
+	}
 }
 
 func (p *plane) update(cfg *config) {
@@ -63,5 +68,12 @@ func (p *plane) update(cfg *config) {
 		if p.y > boundary {
 			p.y = boundary
 		}
+	}
+	if ebiten.IsKeyPressed(ebiten.KeySpace) {
+		bullet := loadBullet("resource/airplane/bullet/bullet1.png", cfg, p)
+		p.bullets = append(p.bullets, bullet)
+	}
+	for _, bullet := range p.bullets {
+		bullet.upadte()
 	}
 }
