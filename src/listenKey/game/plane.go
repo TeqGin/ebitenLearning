@@ -3,17 +3,19 @@ package game
 import (
 	"ebitenLearning/src/utils"
 	"log"
+	"time"
 
 	"github.com/hajimehoshi/ebiten/v2"
 )
 
 type plane struct {
-	image   *ebiten.Image
-	x       float64
-	y       float64
-	bullets []*bullet
-	live    int
-	speed   float64
+	image          *ebiten.Image
+	x              float64
+	y              float64
+	bullets        []*bullet
+	live           int
+	speed          float64
+	lastBulletTime time.Time
 }
 
 func loadPlane(path string, cfg *config) *plane {
@@ -69,9 +71,11 @@ func (p *plane) update(cfg *config) {
 			p.y = boundary
 		}
 	}
-	if ebiten.IsKeyPressed(ebiten.KeySpace) {
-		bullet := loadBullet("resource/airplane/bullet/bullet1.png", cfg, p)
+	if ebiten.IsKeyPressed(ebiten.KeySpace) &&
+		time.Since(p.lastBulletTime).Milliseconds() > cfg.BulletInterval {
+		bullet := loadBullet(cfg, p)
 		p.bullets = append(p.bullets, bullet)
+		p.lastBulletTime = time.Now()
 	}
 	for _, bullet := range p.bullets {
 		bullet.upadte()

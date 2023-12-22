@@ -9,10 +9,11 @@ import (
 )
 
 type config struct {
-	Width   int        `json:"width"`
-	Hight   int        `json:"height"`
-	Title   string     `json:"title"`
-	BgColor color.RGBA `json:"bgColor"`
+	Width          int        `json:"width"`
+	Hight          int        `json:"height"`
+	Title          string     `json:"title"`
+	BgColor        color.RGBA `json:"bgColor"`
+	BulletInterval int64      `json:"bulletInterval"`
 }
 
 func loadConfig() *config {
