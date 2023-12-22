@@ -4,8 +4,6 @@ go 1.20
 
 require github.com/hajimehoshi/ebiten/v2 v2.6.3
 
-require github.com/go-bindata/go-bindata v3.1.2+incompatible // indirect
-
 require (
 	github.com/ebitengine/purego v0.5.0 // indirect
 	github.com/jezek/xgb v1.1.0 // indirect
