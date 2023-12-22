@@ -18,7 +18,7 @@ var img = utils.ResizeImageFromReader("resource/airplane/bullet/bullet1.png", 0.
 func loadBullet(cfg *config, p *plane) *bullet {
 	return &bullet{
 		image: ebiten.NewImageFromImage(img),
-		x:     p.x + float64(p.image.Bounds().Dx())/2,
+		x:     p.x + float64(p.image.Bounds().Dx())/4,
 		y:     p.y,
 		speed: 6,
 	}
