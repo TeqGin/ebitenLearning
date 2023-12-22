@@ -1,10 +1,10 @@
 package game
 
 import (
+	"ebitenLearning/src/utils"
 	"log"
 
 	"github.com/hajimehoshi/ebiten/v2"
-	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
 )
 
 type plane struct {
@@ -16,13 +16,14 @@ type plane struct {
 }
 
 func loadPlane(path string, cfg *config) *plane {
-	img, _, err := ebitenutil.NewImageFromFile(path)
-	if err != nil {
-		log.Fatal(err)
+	// img, _, err := ebitenutil.NewImageFromFile(path)
+	img := utils.ResizeImageFromFile(path, 0.5)
+	if img == nil {
+		log.Fatal("resize image failed")
 	}
 
 	return &plane{
-		image: img,
+		image: ebiten.NewImageFromImage(img),
 		x:     float64(cfg.Width-img.Bounds().Dx()) / 2,
 		y:     float64(cfg.Hight - img.Bounds().Dy()),
 		live:  50,
