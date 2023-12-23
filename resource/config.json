@@ -8,5 +8,6 @@
     "b": 230,
     "a": 255
   },
-  "bulletInterval": 100
+  "bulletInterval": 100,
+  "enemyInterval": 800
 }

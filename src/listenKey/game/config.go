@@ -14,6 +14,7 @@ type config struct {
 	Title          string     `json:"title"`
 	BgColor        color.RGBA `json:"bgColor"`
 	BulletInterval int64      `json:"bulletInterval"`
+	EnemyInterval  int64      `json:"enemyInterval"`
 }
 
 func loadConfig() *config {

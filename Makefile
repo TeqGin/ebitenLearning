@@ -1,9 +1,9 @@
-all:genResource build
+all:build
 
 genResource:
 	go-bindata -pkg resource -o src/resource/data.go resource/...
 
-build:
+build:genResource
 ifeq ($(shell go env GOOS),windows)
 	go build -o warGame.exe ./src/listenKey/
 else
