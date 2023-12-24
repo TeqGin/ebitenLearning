@@ -13,20 +13,20 @@ type bullet struct {
 	speed float64
 }
 
-var img = utils.ResizeImageFromReader("resource/airplane/bullet/bullet1.png", 0.2)
-
-func loadBullet(cfg *config, p *plane) *bullet {
+func loadBullet(path string, cfg *config, a aircraft, speed float64, scalar float64) *bullet {
+	var img = utils.ResizeImageFromReader(path, scalar)
 	return &bullet{
 		image: ebiten.NewImageFromImage(img),
-		x:     p.x + float64(p.image.Bounds().Dx())/4,
-		y:     p.y,
-		speed: 6,
+		x:     a.getX() + float64(a.getImage().Bounds().Dx()-img.Bounds().Dx())/2,
+		y:     a.getY() + float64(a.getImage().Bounds().Dy()-img.Bounds().Dy())/2,
+		speed: speed,
 	}
 }
 
-func (b *bullet) draw(screen *ebiten.Image, cfg *config) {
+func (b *bullet) draw(screen *ebiten.Image, cfg *config, flipX float64) {
 	op := &ebiten.DrawImageOptions{}
 	op.GeoM.Translate(b.x, b.y)
+	op.GeoM.Scale(flipX, 1)
 	screen.DrawImage(b.image, op)
 }
 

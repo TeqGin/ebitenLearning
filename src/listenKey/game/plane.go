@@ -8,11 +8,17 @@ import (
 	"github.com/hajimehoshi/ebiten/v2"
 )
 
+type aircraft interface {
+	getX() float64
+	getY() float64
+	getImage() *ebiten.Image
+}
+
 type plane struct {
 	image          *ebiten.Image
 	x              float64
 	y              float64
-	bullets        []*bullet
+	bullets        map[*bullet]struct{}
 	live           int
 	speed          float64
 	lastBulletTime time.Time
@@ -20,7 +26,7 @@ type plane struct {
 
 func loadPlane(path string, cfg *config) *plane {
 	// img, _, err := ebitenutil.NewImageFromFile(path)
-	img := utils.ResizeImageFromReader(path, 0.5)
+	img := utils.ResizeImageFromReader(path, 0.8)
 	if img == nil {
 		log.Fatal("resize image failed")
 	}
@@ -31,7 +37,7 @@ func loadPlane(path string, cfg *config) *plane {
 		y:       float64(cfg.Hight - img.Bounds().Dy()),
 		live:    50,
 		speed:   5,
-		bullets: make([]*bullet, 0, 50),
+		bullets: make(map[*bullet]struct{}),
 	}
 }
 
@@ -39,8 +45,8 @@ func (p *plane) Draw(screen *ebiten.Image, cfg *config) {
 	op := &ebiten.DrawImageOptions{}
 	op.GeoM.Translate(p.x, p.y)
 	screen.DrawImage(p.image, op)
-	for _, bullet := range p.bullets {
-		bullet.draw(screen, cfg)
+	for bullet := range p.bullets {
+		bullet.draw(screen, cfg, 1)
 	}
 }
 
@@ -73,11 +79,24 @@ func (p *plane) update(cfg *config) {
 	}
 	if ebiten.IsKeyPressed(ebiten.KeySpace) &&
 		time.Since(p.lastBulletTime).Milliseconds() > cfg.BulletInterval {
-		bullet := loadBullet(cfg, p)
-		p.bullets = append(p.bullets, bullet)
+		bullet := loadBullet("resource/airplane/bullet/bullet1.png", cfg, p, 6, 0.2)
+		p.bullets[bullet] = struct{}{}
 		p.lastBulletTime = time.Now()
 	}
-	for _, bullet := range p.bullets {
+
+	for bullet := range p.bullets {
 		bullet.upadte()
 	}
+}
+
+func (p *plane) getX() float64 {
+	return p.x
+}
+
+func (p *plane) getY() float64 {
+	return p.y
+}
+
+func (p *plane) getImage() *ebiten.Image {
+	return p.image
 }

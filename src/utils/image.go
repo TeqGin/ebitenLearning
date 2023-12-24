@@ -29,7 +29,6 @@ func ResizeImageFromFile(path string, scalar float64) image.Image {
 }
 
 func ResizeImageFromReader(path string, scalar float64) image.Image {
-
 	b, _ := resource.Asset(path)
 	// Decode the original image
 	originalImg, _, err := image.Decode(bytes.NewReader(b))
