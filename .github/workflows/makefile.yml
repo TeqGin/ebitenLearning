@@ -14,9 +14,9 @@ jobs:
     - uses: actions/checkout@v3
 
     - name: prepareEnv
-      run: go install github.com/go-bindata/go-bindata/...@latest
-
-    - name: build
       run: |
         go install github.com/go-bindata/go-bindata/...@latest
-        make build
+        go-bindata -version
+
+    - name: build
+      run: make build
