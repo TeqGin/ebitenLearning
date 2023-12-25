@@ -1,4 +1,4 @@
-# war game
+# War Game
   - golang 1.20.12
   - engin: ebiten
 
