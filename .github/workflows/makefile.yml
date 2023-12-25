@@ -17,4 +17,6 @@ jobs:
       run: go install github.com/go-bindata/go-bindata/...@latest
 
     - name: build
-      run: make build
+      run: |
+        go install github.com/go-bindata/go-bindata/...@latest
+        make build
