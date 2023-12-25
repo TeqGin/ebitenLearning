@@ -2,11 +2,9 @@ package game
 
 import (
 	"ebitenLearning/src/utils"
-	"fmt"
 	"time"
 
 	"github.com/hajimehoshi/ebiten/v2"
-	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
 )
 
 const (
@@ -67,8 +65,11 @@ func (g *Game) Update() error {
 func (g *Game) Draw(screen *ebiten.Image) {
 	switch g.status {
 	case FAILURE:
-		screen.Fill(g.cfg.BgColor)
-		ebitenutil.DebugPrint(screen, fmt.Sprintf("Game Over!\nYour point is %d", g.point))
+		g.bg.draw(screen, g.cfg)
+		g.p.Draw(screen, g.cfg)
+		for enemy := range g.enemies {
+			enemy.draw(screen, g.cfg)
+		}
 	case RUNNING:
 		g.bg.draw(screen, g.cfg)
 		g.p.Draw(screen, g.cfg)
