@@ -21,7 +21,7 @@ type background struct {
 }
 
 func loadBackground(path string) *background {
-	b, _ := resource.Asset("resource/background/bg1.jpg")
+	b, _ := resource.Asset(path)
 	img, _, err := ebitenutil.NewImageFromReader(bytes.NewReader(b))
 	if err != nil {
 		log.Fatal(err)
@@ -29,7 +29,6 @@ func loadBackground(path string) *background {
 
 	width := img.Bounds().Dx()
 	height := img.Bounds().Dy()
-
 	return &background{
 		image:  img,
 		width:  width,

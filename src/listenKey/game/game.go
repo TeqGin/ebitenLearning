@@ -9,6 +9,15 @@ import (
 	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
 )
 
+const (
+	PREPARE GameStatus = iota
+	RUNNING
+	FAILURE
+	SUCCESS
+)
+
+type GameStatus int
+
 type Game struct {
 	cfg           *config
 	p             *plane
@@ -16,6 +25,8 @@ type Game struct {
 	lastLoadEnemy time.Time
 	bg            *background
 	point         int
+	status        GameStatus
+	menu          *Menu
 }
 
 const (
@@ -30,37 +41,43 @@ func NewGame() *Game {
 		cfg:     cfg,
 		p:       loadPlane(resourcePath+"/airplane/plane/plane1.png", cfg),
 		enemies: make(map[*enemy]struct{}),
-		bg:      loadBackground(resourcePath + "/background/bg1.jpg"),
+		bg:      loadBackground(resourcePath + "/background/bg_plain.jpg"),
+		menu:    loadMenu(),
+		status:  PREPARE,
 	}
 }
 
 // update the running data
 func (g *Game) Update() error {
-	if g.p.live <= 0 {
-		return nil
+	switch g.status {
+	case RUNNING:
+		g.bg.update()
+		g.p.update(g.cfg)
+		for enemy := range g.enemies {
+			enemy.update(g.cfg)
+		}
+		g.GenerateEnemy()
+		g.CollisionDetect()
+	case PREPARE:
+		g.menu.update(g)
 	}
-	g.bg.update()
-	g.p.update(g.cfg)
-	for enemy := range g.enemies {
-		enemy.update(g.cfg)
-	}
-	g.GenerateEnemy()
-	g.CollisionDetect()
 	return nil
 }
 
 func (g *Game) Draw(screen *ebiten.Image) {
-	if g.p.live <= 0 {
+	switch g.status {
+	case FAILURE:
+		screen.Fill(g.cfg.BgColor)
 		ebitenutil.DebugPrint(screen, fmt.Sprintf("Game Over!\nYour point is %d", g.point))
-		return
+	case RUNNING:
+		g.bg.draw(screen, g.cfg)
+		g.p.Draw(screen, g.cfg)
+		for enemy := range g.enemies {
+			enemy.draw(screen, g.cfg)
+		}
+	case PREPARE:
+		g.menu.draw(screen, g.cfg)
 	}
-	screen.Fill(g.cfg.BgColor)
-	g.bg.draw(screen, g.cfg)
-	g.p.Draw(screen, g.cfg)
-	for enemy := range g.enemies {
-		enemy.draw(screen, g.cfg)
-	}
-	//
 }
 
 // logic size, use to zoom in/out the screen
@@ -120,8 +137,7 @@ func (g *Game) survival() {
 			Right: utils.Point{X: enemy.x + float64(enemy.image.Bounds().Dx()), Y: enemy.y + float64(enemy.image.Bounds().Dy())},
 		}
 		if utils.IsOverlappingPoint(r1, r3) {
-			fmt.Println("game over")
-			g.p.live = 0
+			g.status = FAILURE
 		}
 		for _, bullet := range enemy.bullets {
 			r2 := utils.Rectangle{
@@ -129,10 +145,8 @@ func (g *Game) survival() {
 				Right: utils.Point{X: bullet.x + float64(bullet.image.Bounds().Dx()), Y: bullet.y + float64(bullet.image.Bounds().Dy())},
 			}
 			if utils.IsOverlappingPoint(r1, r2) {
-				fmt.Println("game over")
-				g.p.live = 0
+				g.status = FAILURE
 			}
 		}
 	}
-
 }
