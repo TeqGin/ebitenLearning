@@ -22,3 +22,6 @@ buildMac:
 	SET GOOS=darwin
 	SET GOARCH=amd64
 	go build -o warGame ./src/listenKey/
+
+buidlWindows:
+	CGO_ENABLED=0 GOOS=windows GOARCH=amd64 go build -o warGame.exe ./src/listenKey/
