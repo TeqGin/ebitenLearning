@@ -1,14 +1,11 @@
 package game
 
 import (
-	"bytes"
-	"ebitenLearning/src/resource"
-	"log"
+	"ebitenLearning/src/utils"
 
 	_ "image/jpeg"
 
 	"github.com/hajimehoshi/ebiten/v2"
-	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
 )
 
 type background struct {
@@ -20,17 +17,13 @@ type background struct {
 	speed  float64
 }
 
-func loadBackground(path string) *background {
-	b, _ := resource.Asset(path)
-	img, _, err := ebitenutil.NewImageFromReader(bytes.NewReader(b))
-	if err != nil {
-		log.Fatal(err)
-	}
+func loadBackground(path string, scalar float64) *background {
+	img := utils.ResizeImageFromReader(path, scalar)
 
 	width := img.Bounds().Dx()
 	height := img.Bounds().Dy()
 	return &background{
-		image:  img,
+		image:  ebiten.NewImageFromImage(img),
 		width:  width,
 		height: height,
 		y1:     0,

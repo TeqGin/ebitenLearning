@@ -41,7 +41,7 @@ func NewGame() *Game {
 		cfg:     cfg,
 		p:       loadPlane(resourcePath+"/airplane/plane/plane1.png", cfg),
 		enemies: make(map[*enemy]struct{}),
-		bg:      loadBackground(resourcePath + "/background/bg_plain.jpg"),
+		bg:      loadBackground(resourcePath+"/background/bg_plain.jpg", 1),
 		menu:    loadMenu(),
 		status:  PREPARE,
 	}

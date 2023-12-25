@@ -22,7 +22,7 @@ func loadMenu() *Menu {
 		log.Fatal(err)
 	}
 	return &Menu{
-		bg:             loadBackground(resourcePath + "/background/bg_sky_with_logo.jpg"),
+		bg:             loadBackground(resourcePath+"/background/bg_sky_with_logo.jpg", 1.12),
 		startGameImage: img,
 	}
 }
