@@ -5,6 +5,7 @@ import (
 	"ebitenLearning/src/resource"
 	"fmt"
 	"image"
+	_ "image/png"
 	"os"
 
 	"github.com/nfnt/resize"
@@ -33,6 +34,7 @@ func ResizeImageFromReader(path string, scalar float64) image.Image {
 	// Decode the original image
 	originalImg, _, err := image.Decode(bytes.NewReader(b))
 	if err != nil {
+		fmt.Println(path)
 		fmt.Println("Error decoding image:", err)
 		return nil
 	}

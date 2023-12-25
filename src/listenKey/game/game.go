@@ -17,14 +17,16 @@ const (
 type GameStatus int
 
 type Game struct {
-	cfg           *config
-	p             *plane
-	enemies       map[*enemy]struct{}
-	lastLoadEnemy time.Time
-	bg            *background
-	point         int
-	status        GameStatus
-	menu          *Menu
+	cfg               *config
+	p                 *plane
+	enemies           map[*enemy]struct{}
+	lastLoadEnemy     time.Time
+	bg                *background
+	point             int
+	status            GameStatus
+	menu              *Menu
+	restartButton     *Button
+	lastClickInterval time.Time
 }
 
 const (
@@ -36,12 +38,13 @@ func NewGame() *Game {
 	ebiten.SetWindowSize(cfg.Width, cfg.Hight)
 	ebiten.SetWindowTitle(cfg.Title)
 	return &Game{
-		cfg:     cfg,
-		p:       loadPlane(resourcePath+"/airplane/plane/plane1.png", cfg),
-		enemies: make(map[*enemy]struct{}),
-		bg:      loadBackground(resourcePath+"/background/bg_plain.jpg", 1),
-		menu:    loadMenu(),
-		status:  PREPARE,
+		cfg:           cfg,
+		p:             loadPlane(resourcePath+"/airplane/plane/plane1.png", cfg),
+		enemies:       make(map[*enemy]struct{}),
+		bg:            loadBackground(resourcePath+"/background/bg_plain.jpg", 1),
+		menu:          loadMenu(),
+		restartButton: loadIcon("resource/icon/restart.png", 200, float64(cfg.Hight)/2, 1),
+		status:        PREPARE,
 	}
 }
 
@@ -58,6 +61,14 @@ func (g *Game) Update() error {
 		g.CollisionDetect()
 	case PREPARE:
 		g.menu.update(g)
+	case FAILURE:
+		g.restartButton.update(g, PREPARE)
+		if g.status == PREPARE {
+			g.p.bullets = make(map[*bullet]struct{})
+			g.enemies = make(map[*enemy]struct{})
+			g.p.x = float64(g.cfg.Width-g.p.image.Bounds().Dx()) / 2
+			g.p.y = float64(g.cfg.Hight - g.p.image.Bounds().Dy())
+		}
 	}
 	return nil
 }
@@ -70,6 +81,7 @@ func (g *Game) Draw(screen *ebiten.Image) {
 		for enemy := range g.enemies {
 			enemy.draw(screen, g.cfg)
 		}
+		g.restartButton.draw(screen)
 	case RUNNING:
 		g.bg.draw(screen, g.cfg)
 		g.p.Draw(screen, g.cfg)

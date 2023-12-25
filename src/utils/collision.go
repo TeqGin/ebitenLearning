@@ -4,6 +4,7 @@ type Point struct {
 	X, Y float64
 }
 
+// left top and right bottom
 type Rectangle struct {
 	Left, Right Point
 }
