@@ -59,6 +59,7 @@ func (g *Game) Update() error {
 		}
 		g.GenerateEnemy()
 		g.CollisionDetect()
+		g.CleanObjs()
 	case PREPARE:
 		g.menu.update(g)
 	case FAILURE:
@@ -70,6 +71,7 @@ func (g *Game) Update() error {
 			g.p.y = float64(g.cfg.Hight - g.p.image.Bounds().Dy())
 		}
 	}
+
 	return nil
 }
 
@@ -161,5 +163,29 @@ func (g *Game) survival() {
 				g.status = FAILURE
 			}
 		}
+	}
+}
+
+func (g *Game) CleanObjs() {
+	bullets := make([]*bullet, 0, 20)
+	for b := range g.p.bullets {
+		if b.x < 0 ||
+			b.x > float64(g.cfg.Width) ||
+			b.y < 0 {
+			bullets = append(bullets, b)
+		}
+	}
+
+	enemies := make([]*enemy, 0, 20)
+	for enemy := range g.enemies {
+		if enemy.y > float64(g.cfg.Hight) {
+			enemies = append(enemies, enemy)
+		}
+	}
+	for _, b := range bullets {
+		delete(g.p.bullets, b)
+	}
+	for _, enemy := range enemies {
+		delete(g.enemies, enemy)
 	}
 }
