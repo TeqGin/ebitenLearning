@@ -48,7 +48,7 @@ func (b *bullet) upadte() {
 			sign = 1
 		}
 		b.y -= b.speed
-		b.x = sign*math.Sqrt(math.Abs((b.y-b.originY)/0.05)) + b.originX
+		b.x = sign*math.Sqrt(math.Abs((b.y-b.originY)/0.015)) + b.originX
 	} else {
 		b.y -= b.speed
 	}

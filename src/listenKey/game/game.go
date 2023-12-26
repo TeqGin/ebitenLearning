@@ -120,8 +120,8 @@ func (g *Game) killEnemy() {
 		}
 		for enemy := range g.enemies {
 			r2 := utils.Rectangle{
-				Left:  utils.Point{X: enemy.x, Y: enemy.y},
-				Right: utils.Point{X: enemy.x + float64(enemy.image.Bounds().Dx()), Y: enemy.y + float64(enemy.image.Bounds().Dy())*0.8},
+				Left:  utils.Point{X: enemy.x + float64(enemy.image.Bounds().Dx())*0.25, Y: enemy.y + float64(enemy.image.Bounds().Dy())*0.25},
+				Right: utils.Point{X: enemy.x + float64(enemy.image.Bounds().Dx())*0.75, Y: enemy.y + float64(enemy.image.Bounds().Dy())*0.75},
 			}
 			if utils.IsOverlappingPoint(r1, r2) {
 				deadBullets = append(deadBullets, bullect)
