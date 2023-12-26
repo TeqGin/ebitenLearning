@@ -37,7 +37,15 @@ func loadBullet(path string, cfg *config, a aircraft, speed float64, scalar floa
 func (b *bullet) draw(screen *ebiten.Image, cfg *config, flipX float64) {
 	op := &ebiten.DrawImageOptions{}
 	op.GeoM.Translate(b.x, b.y)
-	op.GeoM.Scale(flipX, 1)
+	if b.isSpecial {
+		op.GeoM.Translate(-b.x, -b.y)
+		if b.isRight {
+			op.GeoM.Rotate(math.Pi/2 - math.Atan(0.03*(b.x-b.originX)))
+		} else {
+			op.GeoM.Rotate(-math.Pi/2 - math.Atan(0.03*(b.x-b.originX)))
+		}
+		op.GeoM.Translate(b.x, b.y)
+	}
 	screen.DrawImage(b.image, op)
 }
 
