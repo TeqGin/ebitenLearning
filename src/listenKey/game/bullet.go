@@ -39,11 +39,8 @@ func (b *bullet) draw(screen *ebiten.Image, cfg *config, flipX float64) {
 	op.GeoM.Translate(b.x, b.y)
 	if b.isSpecial {
 		op.GeoM.Translate(-b.x, -b.y)
-		if b.isRight {
-			op.GeoM.Rotate(math.Pi/2 - math.Atan(0.03*(b.x-b.originX)))
-		} else {
-			op.GeoM.Rotate(-math.Pi/2 - math.Atan(0.03*(b.x-b.originX)))
-		}
+		sign := (b.x - b.originX) / math.Abs(b.x-b.originX)
+		op.GeoM.Rotate(math.Atan2(sign, sign*0.03*(b.x-b.originX)))
 		op.GeoM.Translate(b.x, b.y)
 	}
 	screen.DrawImage(b.image, op)
