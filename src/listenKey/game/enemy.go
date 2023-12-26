@@ -42,7 +42,7 @@ func (e *enemy) draw(screen *ebiten.Image, cfg *config) {
 func (e *enemy) update(cfg *config) {
 	e.y += e.speed
 	if time.Since(e.lastLoadBullet).Milliseconds() > 500 {
-		bullet := loadBullet("resource/airplane/bullet/enemy_bullet2.png", cfg, e, -4, 1)
+		bullet := loadBullet("resource/airplane/bullet/enemy_bullet2.png", cfg, e, -4, 1, false, false)
 		e.bullets = append(e.bullets, bullet)
 		e.lastLoadBullet = time.Now()
 	}

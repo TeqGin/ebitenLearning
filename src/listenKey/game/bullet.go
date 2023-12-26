@@ -2,24 +2,35 @@ package game
 
 import (
 	"ebitenLearning/src/utils"
+	"math"
 
 	"github.com/hajimehoshi/ebiten/v2"
 )
 
 type bullet struct {
-	image *ebiten.Image
-	x     float64
-	y     float64
-	speed float64
+	image     *ebiten.Image
+	originX   float64
+	originY   float64
+	x         float64
+	y         float64
+	speed     float64
+	isSpecial bool
+	isRight   bool
 }
 
-func loadBullet(path string, cfg *config, a aircraft, speed float64, scalar float64) *bullet {
+func loadBullet(path string, cfg *config, a aircraft, speed float64, scalar float64, isSpecial, isRight bool) *bullet {
 	var img = utils.ResizeImageFromReader(path, scalar)
+	originX := a.getX() + float64(a.getImage().Bounds().Dx()-img.Bounds().Dx())/2
+	originY := a.getY() + float64(a.getImage().Bounds().Dy()-img.Bounds().Dy())/2
 	return &bullet{
-		image: ebiten.NewImageFromImage(img),
-		x:     a.getX() + float64(a.getImage().Bounds().Dx()-img.Bounds().Dx())/2,
-		y:     a.getY() + float64(a.getImage().Bounds().Dy()-img.Bounds().Dy())/2,
-		speed: speed,
+		image:     ebiten.NewImageFromImage(img),
+		originX:   originX,
+		originY:   originY,
+		x:         originX,
+		y:         originY,
+		speed:     speed,
+		isSpecial: isSpecial,
+		isRight:   isRight,
 	}
 }
 
@@ -31,5 +42,14 @@ func (b *bullet) draw(screen *ebiten.Image, cfg *config, flipX float64) {
 }
 
 func (b *bullet) upadte() {
-	b.y -= b.speed
+	if b.isSpecial {
+		sign := float64(-1)
+		if b.isRight {
+			sign = 1
+		}
+		b.y -= b.speed
+		b.x = sign*math.Sqrt(math.Abs((b.y-b.originY)/0.05)) + b.originX
+	} else {
+		b.y -= b.speed
+	}
 }

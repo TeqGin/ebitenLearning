@@ -79,7 +79,11 @@ func (p *plane) update(cfg *config) {
 	}
 	if ebiten.IsKeyPressed(ebiten.KeySpace) &&
 		time.Since(p.lastBulletTime).Milliseconds() > cfg.BulletInterval {
-		bullet := loadBullet("resource/airplane/bullet/bullet1.png", cfg, p, 6, 0.2)
+		bullet := loadBullet("resource/airplane/bullet/bullet1.png", cfg, p, 6, 0.2, false, false)
+		p.bullets[bullet] = struct{}{}
+		bullet = loadBullet("resource/airplane/bullet/bullet1.png", cfg, p, 6, 0.2, true, false)
+		p.bullets[bullet] = struct{}{}
+		bullet = loadBullet("resource/airplane/bullet/bullet1.png", cfg, p, 6, 0.2, true, true)
 		p.bullets[bullet] = struct{}{}
 		p.lastBulletTime = time.Now()
 	}
