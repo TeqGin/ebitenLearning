@@ -12,6 +12,7 @@ const (
 	RUNNING
 	FAILURE
 	SUCCESS
+	PAUSE
 )
 
 type GameStatus int
@@ -25,8 +26,9 @@ type Game struct {
 	point             int
 	status            GameStatus
 	menu              *Menu
-	restartButton     *Button
+	settlement        *Settlement
 	lastClickInterval time.Time
+	pauseTime         time.Time
 }
 
 const (
@@ -38,13 +40,13 @@ func NewGame() *Game {
 	ebiten.SetWindowSize(cfg.Width, cfg.Hight)
 	ebiten.SetWindowTitle(cfg.Title)
 	return &Game{
-		cfg:           cfg,
-		p:             loadPlane(resourcePath+"/airplane/plane/plane1.png", cfg),
-		enemies:       make(map[*enemy]struct{}),
-		bg:            loadBackground(resourcePath+"/background/bg_plain.jpg", 1),
-		menu:          loadMenu(),
-		restartButton: loadIcon("resource/icon/restart.png", 200, float64(cfg.Hight)/2, 1),
-		status:        PREPARE,
+		cfg:        cfg,
+		p:          loadPlane(resourcePath+"/airplane/plane/plane1.png", cfg),
+		enemies:    make(map[*enemy]struct{}),
+		bg:         loadBackground(resourcePath+"/background/bg_plain.jpg", 1),
+		menu:       loadMenu(),
+		settlement: loadSettlement(cfg),
+		status:     PREPARE,
 	}
 }
 
@@ -63,12 +65,10 @@ func (g *Game) Update() error {
 	case PREPARE:
 		g.menu.update(g)
 	case FAILURE:
-		g.restartButton.update(g, PREPARE)
-		if g.status == PREPARE {
-			g.p.bullets = make(map[*bullet]struct{})
-			g.enemies = make(map[*enemy]struct{})
-			g.p.x = float64(g.cfg.Width-g.p.image.Bounds().Dx()) / 2
-			g.p.y = float64(g.cfg.Hight - g.p.image.Bounds().Dy())
+		g.settlement.update(g, PREPARE)
+	case PAUSE:
+		if time.Since(g.pauseTime).Milliseconds() > 1000 {
+			g.status = FAILURE
 		}
 	}
 
@@ -78,15 +78,11 @@ func (g *Game) Update() error {
 func (g *Game) Draw(screen *ebiten.Image) {
 	switch g.status {
 	case FAILURE:
+		g.settlement.draw(screen, g.cfg, g.point)
+	case RUNNING, PAUSE:
 		g.bg.draw(screen, g.cfg)
 		g.p.Draw(screen, g.cfg)
-		for enemy := range g.enemies {
-			enemy.draw(screen, g.cfg)
-		}
-		g.restartButton.draw(screen)
-	case RUNNING:
-		g.bg.draw(screen, g.cfg)
-		g.p.Draw(screen, g.cfg)
+		drawNumber(screen, 350, 5, g.point)
 		for enemy := range g.enemies {
 			enemy.draw(screen, g.cfg)
 		}
@@ -136,7 +132,7 @@ func (g *Game) killEnemy() {
 		delete(g.p.bullets, bullet)
 	}
 	for _, enemy := range deadEnemies {
-		g.point += 500
+		g.point += 100
 		delete(g.enemies, enemy)
 	}
 }
@@ -152,7 +148,8 @@ func (g *Game) survival() {
 			Right: utils.Point{X: enemy.x + float64(enemy.image.Bounds().Dx()), Y: enemy.y + float64(enemy.image.Bounds().Dy())},
 		}
 		if utils.IsOverlappingPoint(r1, r3) {
-			g.status = FAILURE
+			g.status = PAUSE
+			g.pauseTime = time.Now()
 		}
 		for _, bullet := range enemy.bullets {
 			r2 := utils.Rectangle{
@@ -160,7 +157,8 @@ func (g *Game) survival() {
 				Right: utils.Point{X: bullet.x + float64(bullet.image.Bounds().Dx()), Y: bullet.y + float64(bullet.image.Bounds().Dy())},
 			}
 			if utils.IsOverlappingPoint(r1, r2) {
-				g.status = FAILURE
+				g.status = PAUSE
+				g.pauseTime = time.Now()
 			}
 		}
 	}
