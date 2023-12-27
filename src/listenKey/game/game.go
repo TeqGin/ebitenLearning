@@ -41,7 +41,7 @@ func NewGame() *Game {
 	ebiten.SetWindowTitle(cfg.Title)
 	return &Game{
 		cfg:        cfg,
-		p:          loadPlane(resourcePath+"/airplane/plane/plane1.png", cfg),
+		p:          loadPlane(resourcePath+"/airplane/plane/user_plane_1.png", cfg),
 		enemies:    make(map[*enemy]struct{}),
 		bg:         loadBackground(resourcePath+"/background/bg_plain.jpg", 1),
 		menu:       loadMenu(),
@@ -139,8 +139,8 @@ func (g *Game) killEnemy() {
 
 func (g *Game) survival() {
 	r1 := utils.Rectangle{
-		Left:  utils.Point{X: g.p.x + float64(g.p.image.Bounds().Dx())*0.5, Y: g.p.y + float64(g.p.image.Bounds().Dy())*0.5},
-		Right: utils.Point{X: g.p.x + float64(g.p.image.Bounds().Dx()), Y: g.p.y + float64(g.p.image.Bounds().Dy())},
+		Left:  utils.Point{X: g.p.x + float64(g.p.image.Bounds().Dx())*0.3, Y: g.p.y + float64(g.p.image.Bounds().Dy())*0.3},
+		Right: utils.Point{X: g.p.x + float64(g.p.image.Bounds().Dx())*0.75, Y: g.p.y + float64(g.p.image.Bounds().Dy())*0.75},
 	}
 	for enemy := range g.enemies {
 		r3 := utils.Rectangle{
