@@ -22,6 +22,6 @@ go.work
 
 .vscode
 
-warGame
+warGame_mac
 
 src/resource/data.go
