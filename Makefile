@@ -5,9 +5,9 @@ genResource:
 
 build:genResource
 ifeq ($(shell go env GOOS),windows)
-	go build -o warGame.exe ./src/listenKey/
+	go build -o warGame.exe ./src/warGame/
 else
-	go build -o warGame ./src/listenKey/
+	go build -o warGame ./src/warGame/
 endif
 
 run:
@@ -21,7 +21,7 @@ buildMac:
 	SET CGO_ENABLED=0
 	SET GOOS=darwin
 	SET GOARCH=amd64
-	go build -o warGame ./src/listenKey/
+	go build -o warGame ./src/warGame/
 
-buidlWindows:
-	CGO_ENABLED=0 GOOS=windows GOARCH=amd64 go build -o warGame.exe ./src/listenKey/
+buildWindows:
+	CGO_ENABLED=0 GOOS=windows GOARCH=amd64 go build -o warGame.exe ./src/warGame/
