@@ -5,6 +5,8 @@ import (
 	"time"
 
 	"github.com/hajimehoshi/ebiten/v2"
+	"github.com/hajimehoshi/ebiten/v2/audio"
+	"github.com/hajimehoshi/ebiten/v2/inpututil"
 )
 
 const (
@@ -29,6 +31,7 @@ type Game struct {
 	settlement        *Settlement
 	lastClickInterval time.Time
 	pauseTime         time.Time
+	bloomPlayer       *audio.Player
 }
 
 const (
@@ -39,6 +42,7 @@ func NewGame() *Game {
 	cfg := loadConfig()
 	ebiten.SetWindowSize(cfg.Width, cfg.Hight)
 	ebiten.SetWindowTitle(cfg.Title)
+
 	return &Game{
 		cfg:        cfg,
 		p:          loadPlane(resourcePath+"/airplane/plane/user_plane_1.png", cfg),
@@ -62,6 +66,16 @@ func (g *Game) Update() error {
 		g.GenerateEnemy()
 		g.CollisionDetect()
 		g.CleanObjs()
+
+		if inpututil.IsKeyJustPressed(ebiten.KeyP) {
+			// As audioPlayer has one stream and remembers the playing position,
+			// rewinding is needed before playing when reusing audioPlayer.
+			if err := g.bloomPlayer.Rewind(); err != nil {
+				return err
+			}
+
+			g.bloomPlayer.Play()
+		}
 	case PREPARE:
 		g.menu.update(g)
 	case FAILURE:
@@ -133,6 +147,8 @@ func (g *Game) killEnemy() {
 	}
 	for _, enemy := range deadEnemies {
 		g.point += 100
+		enemy.bloomPlayer.Rewind()
+		enemy.bloomPlayer.Play()
 		delete(g.enemies, enemy)
 	}
 }
