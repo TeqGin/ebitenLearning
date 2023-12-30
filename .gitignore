@@ -23,5 +23,6 @@ go.work
 .vscode
 
 warGame_mac
+snakeGame_mac
 
 src/resource/data.go
