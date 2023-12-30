@@ -11,7 +11,7 @@ import (
 type Fruit struct {
 	Img           *ebiten.Image
 	Width, Height int
-	X, Y          float64
+	X, Y          int
 }
 
 func LoadFruit(path string, scalar float64) *Fruit {
@@ -22,18 +22,26 @@ func LoadFruit(path string, scalar float64) *Fruit {
 		Img:    ebiten.NewImageFromImage(img),
 		Width:  w,
 		Height: h,
-		X:      float64(rand.Intn(500 - w)),
-		Y:      float64(rand.Intn(500 - h)),
+		X:      rand.Intn(50),
+		Y:      rand.Intn(50),
 	}
 }
 
 func (f *Fruit) Generate() {
-	f.X = float64(rand.Intn(500 - f.Width))
-	f.Y = float64(rand.Intn(500 - f.Height))
+	f.X = rand.Intn(50)
+	f.Y = rand.Intn(50)
 }
 
 func (f *Fruit) Draw(screen *ebiten.Image) {
+	if f.X < 0 || f.Y < 0 {
+		return
+	}
 	op := &ebiten.DrawImageOptions{}
-	op.GeoM.Translate(f.X, f.Y)
+	op.GeoM.Translate(float64(f.X*gridSize), float64(f.Y*gridSize))
 	screen.DrawImage(f.Img, op)
+}
+
+func (f *Fruit) Remove() {
+	f.X = -1
+	f.Y = -1
 }
