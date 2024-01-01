@@ -63,6 +63,7 @@ func (s *Snake) Update(g *Game) {
 		if s.IsCollisionWithWall(g.cfg) || s.IsCollisionWithSelf() {
 			return
 		}
+
 		if s.IsCollisionWithFruit(g) {
 			s.Body = append(s.Body, s.Body[len(s.Body)-1])
 		}

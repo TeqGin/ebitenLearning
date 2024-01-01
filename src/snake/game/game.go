@@ -17,7 +17,7 @@ func NewGame() *Game {
 	ebiten.SetWindowSize(cfg.Width, cfg.Hight)
 	return &Game{
 		s:   LoadSnake(),
-		f:   LoadFruit("resource/fruit/strawberry.png", 0.025, cfg),
+		f:   LoadFruit("resource/fruit/apple.png", 0.4, cfg),
 		cfg: cfg,
 	}
 }
