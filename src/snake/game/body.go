@@ -3,7 +3,6 @@ package game
 import (
 	"ebitenLearning/src/utils"
 	"image/color"
-	"time"
 
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/inpututil"
@@ -23,11 +22,10 @@ const (
 )
 
 type Snake struct {
-	Body         []utils.Point
-	Dir          Direction
-	lastGrowTime time.Time
-	timer        int
-	moveTime     int
+	Body     []utils.Point
+	Dir      Direction
+	timer    int
+	moveTime int
 }
 
 func LoadSnake() *Snake {
@@ -38,7 +36,7 @@ func LoadSnake() *Snake {
 	}
 }
 
-func (s *Snake) Update() {
+func (s *Snake) Update(g *Game) {
 	if inpututil.IsKeyJustPressed(ebiten.KeyUp) {
 		if s.Dir == DOWN {
 			return
@@ -62,9 +60,11 @@ func (s *Snake) Update() {
 	}
 
 	if s.needMove() {
-		if s.Dir != DIR_NONE && time.Since(s.lastGrowTime).Milliseconds() > 1000 {
+		if s.IsCollisionWithWall(g.cfg) || s.IsCollisionWithSelf() {
+			return
+		}
+		if s.IsCollisionWithFruit(g) {
 			s.Body = append(s.Body, s.Body[len(s.Body)-1])
-			s.lastGrowTime = time.Now()
 		}
 
 		for i := len(s.Body) - 1; i > 0; i-- {
@@ -102,4 +102,33 @@ func (s *Snake) Reset() {
 	s.timer = 0
 	s.moveTime = 3
 	s.Dir = DIR_NONE
+}
+
+func (s *Snake) IsCollisionWithWall(cfg *Config) bool {
+	head := s.Body[0]
+	if head.X <= 0 || head.X >= float64(cfg.Width/gridSize) ||
+		head.Y <= 0 || head.Y >= float64(cfg.Hight/gridSize) {
+		return true
+	}
+	return false
+}
+
+func (s *Snake) IsCollisionWithFruit(g *Game) bool {
+	head := s.Body[0]
+	if head.X == float64(g.f.X) && head.Y == float64(g.f.Y) {
+		g.f.Generate(g.cfg)
+		return true
+	}
+	return false
+}
+
+func (s *Snake) IsCollisionWithSelf() bool {
+	head := s.Body[0]
+	for i := 1; i < len(s.Body); i++ {
+		if head.X == s.Body[i].X &&
+			head.Y == s.Body[i].Y {
+			return true
+		}
+	}
+	return false
 }

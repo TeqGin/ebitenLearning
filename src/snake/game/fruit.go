@@ -14,7 +14,7 @@ type Fruit struct {
 	X, Y          int
 }
 
-func LoadFruit(path string, scalar float64) *Fruit {
+func LoadFruit(path string, scalar float64, cfg *Config) *Fruit {
 	img := utils.ResizeImageFromReader(path, scalar)
 	rand.NewSource(time.Now().UnixNano())
 	w, h := img.Bounds().Dx(), img.Bounds().Dy()
@@ -22,14 +22,14 @@ func LoadFruit(path string, scalar float64) *Fruit {
 		Img:    ebiten.NewImageFromImage(img),
 		Width:  w,
 		Height: h,
-		X:      rand.Intn(50),
-		Y:      rand.Intn(50),
+		X:      rand.Intn(cfg.Width / gridSize),
+		Y:      rand.Intn(cfg.Hight / gridSize),
 	}
 }
 
-func (f *Fruit) Generate() {
-	f.X = rand.Intn(50)
-	f.Y = rand.Intn(50)
+func (f *Fruit) Generate(cfg *Config) {
+	f.X = rand.Intn(cfg.Width / gridSize)
+	f.Y = rand.Intn(cfg.Hight / gridSize)
 }
 
 func (f *Fruit) Draw(screen *ebiten.Image) {
