@@ -21,4 +21,4 @@ jobs:
     - name: build
       run: |
         make build
-        make buildWindows
+        make crossBuild
