@@ -19,7 +19,7 @@ type config struct {
 
 func loadConfig() *config {
 	var cfg config
-	configBytes, err := resource.Asset("resource/war_config.json")
+	configBytes, err := resource.Asset("resource/war/war_config.json")
 	if err != nil {
 		log.Fatal(err)
 	}

@@ -1,15 +1,18 @@
 all:build
 
-genResource:
-	go-bindata -pkg resource -o src/resource/data.go resource/...
+genSnakeGameResource:
+	go-bindata -pkg resource -o src/resource/data.go resource/snake/...
 
-build:genResource
+genWarGameResource:
+	go-bindata -pkg resource -o src/resource/data.go resource/war/...
+
+build:
 ifeq ($(shell go env GOOS),windows)
-	go build -o warGame.exe ./src/warGame/
-	go build -o snakeGame.exe ./src/snake
+	make genWarGameResource && go build -o warGame.exe ./src/warGame/
+	make genSnakeGameResource && go build -o snakeGame.exe ./src/snake
 else
-	go build -o warGame_mac ./src/warGame/
-	go build -o snakeGame_mac ./src/snake
+	make genWarGameResource && go build -o warGame_mac ./src/warGame/
+	make genSnakeGameResource && go build -o snakeGame_mac ./src/snake
 endif
 
 runWarGame:

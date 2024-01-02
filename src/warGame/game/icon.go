@@ -69,15 +69,15 @@ func (n *Number) setXY(x, y float64) {
 
 var (
 	numberMap = map[int]*Number{
-		0: loadNumber("resource/number/number_0.png"),
-		1: loadNumber("resource/number/number_1.png"),
-		2: loadNumber("resource/number/number_2.png"),
-		3: loadNumber("resource/number/number_3.png"),
-		4: loadNumber("resource/number/number_4.png"),
-		5: loadNumber("resource/number/number_5.png"),
-		6: loadNumber("resource/number/number_6.png"),
-		7: loadNumber("resource/number/number_7.png"),
-		8: loadNumber("resource/number/number_8.png"),
-		9: loadNumber("resource/number/number_9.png"),
+		0: loadNumber("resource/war/number/number_0.png"),
+		1: loadNumber("resource/war/number/number_1.png"),
+		2: loadNumber("resource/war/number/number_2.png"),
+		3: loadNumber("resource/war/number/number_3.png"),
+		4: loadNumber("resource/war/number/number_4.png"),
+		5: loadNumber("resource/war/number/number_5.png"),
+		6: loadNumber("resource/war/number/number_6.png"),
+		7: loadNumber("resource/war/number/number_7.png"),
+		8: loadNumber("resource/war/number/number_8.png"),
+		9: loadNumber("resource/war/number/number_9.png"),
 	}
 )

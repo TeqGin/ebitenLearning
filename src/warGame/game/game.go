@@ -35,7 +35,7 @@ type Game struct {
 }
 
 const (
-	resourcePath = "resource"
+	resourcePath = "resource/war"
 )
 
 func NewGame() *Game {

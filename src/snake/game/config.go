@@ -15,7 +15,7 @@ type Config struct {
 
 func LoadConfig() *Config {
 	var cfg Config
-	configBytes, err := resource.Asset("resource/snake_config.json")
+	configBytes, err := resource.Asset("resource/snake/snake_config.json")
 	if err != nil {
 		log.Fatal(err)
 	}

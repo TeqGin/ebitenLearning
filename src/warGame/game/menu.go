@@ -12,7 +12,7 @@ type Menu struct {
 func loadMenu() *Menu {
 	return &Menu{
 		bg:          loadBackground(resourcePath+"/background/bg_sky_with_logo.jpg", 1.12),
-		startButton: loadIcon("resource/icon/start.png", 150, 300, 1),
+		startButton: loadIcon("resource/war/icon/start.png", 150, 300, 1),
 	}
 }
 

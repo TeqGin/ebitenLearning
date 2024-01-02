@@ -13,10 +13,10 @@ type Settlement struct {
 }
 
 func loadSettlement(cfg *config) *Settlement {
-	img := utils.ResizeImageFromReader("resource/background/settlement_failure.png", 1)
+	img := utils.ResizeImageFromReader("resource/war/background/settlement_failure.png", 1)
 	return &Settlement{
-		bg:            loadBackground("resource/background/bg_settlement.jpg", 0.8),
-		restartButton: loadIcon("resource/icon/restart.png", 150, 460, 1),
+		bg:            loadBackground("resource/war/background/bg_settlement.jpg", 0.8),
+		restartButton: loadIcon("resource/war/icon/restart.png", 150, 460, 1),
 		countWindows:  ebiten.NewImageFromImage(img),
 	}
 }
