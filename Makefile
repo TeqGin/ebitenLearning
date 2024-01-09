@@ -45,11 +45,7 @@ ifeq ($(shell go env GOOS),windows)
 else ifeq ($(shell go env GOOS),darwin)
 	CGO_ENABLED=0 GOOS=windows GOARCH=amd64 go build -o warGame.exe ./src/warGame/
 	CGO_ENABLED=0 GOOS=windows GOARCH=amd64 go build -o snakeGame.exe ./src/snake
-	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o warGame_linux ./src/warGame/
-	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o snakeGame_linux ./src/snake
 else ifeq ($(shell go env GOOS),linux)
 	CGO_ENABLED=0 GOOS=windows GOARCH=amd64 go build -o warGame.exe ./src/warGame/
 	CGO_ENABLED=0 GOOS=windows GOARCH=amd64 go build -o snakeGame.exe ./src/snake
-	CGO_ENABLED=0 GOOS=darwin GOARCH=amd64 go build -o warGame_mac ./src/warGame/
-	CGO_ENABLED=0 GOOS=darwin GOARCH=amd64 go build -o snakeGame_mac ./src/snake
 endif
