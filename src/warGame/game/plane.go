@@ -51,26 +51,26 @@ func (p *plane) Draw(screen *ebiten.Image, cfg *config) {
 }
 
 func (p *plane) update(cfg *config) {
-	if ebiten.IsKeyPressed(ebiten.KeyRight) {
+	if ebiten.IsKeyPressed(ebiten.KeyD) || ebiten.IsKeyPressed(ebiten.KeyRight) {
 		p.x += p.speed
 		boundary := float64(cfg.Width - p.image.Bounds().Dx())
 		if p.x >= boundary {
 			p.x = boundary
 		}
 	}
-	if ebiten.IsKeyPressed(ebiten.KeyLeft) {
+	if ebiten.IsKeyPressed(ebiten.KeyA) || ebiten.IsKeyPressed(ebiten.KeyLeft) {
 		p.x -= p.speed
 		if p.x <= 0 {
 			p.x = 0
 		}
 	}
-	if ebiten.IsKeyPressed(ebiten.KeyUp) {
+	if ebiten.IsKeyPressed(ebiten.KeyW) || ebiten.IsKeyPressed(ebiten.KeyUp) {
 		p.y -= p.speed
 		if p.y <= 0 {
 			p.y = 0
 		}
 	}
-	if ebiten.IsKeyPressed(ebiten.KeyDown) {
+	if ebiten.IsKeyPressed(ebiten.KeyS) || ebiten.IsKeyPressed(ebiten.KeyDown) {
 		p.y += p.speed
 		boundary := float64(cfg.Hight - p.image.Bounds().Dy())
 		if p.y > boundary {

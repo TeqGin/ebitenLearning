@@ -19,7 +19,7 @@ genWarGameResource:
 	go-bindata -pkg resource -o src/resource/data.go resource/war/...
 
 build:
-	echo $(shell go env GOOS)
+	@echo $(shell go env GOOS)
 	make genWarGameResource && go build -o $(warGameName) ./src/warGame/
 	make genSnakeGameResource && go build -o $(snakeGameName) ./src/snake
 
