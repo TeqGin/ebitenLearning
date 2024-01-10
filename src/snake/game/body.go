@@ -105,10 +105,10 @@ func (s *Snake) Reset() {
 	s.Dir = DIR_NONE
 }
 
-func (s *Snake) IsCollisionWithWall(cfg *Config) bool {
+func (s *Snake) IsCollisionWithWall(cfg *utils.Config) bool {
 	head := s.Body[0]
 	if head.X <= 0 || head.X >= float64(cfg.Width/gridSize) ||
-		head.Y <= 0 || head.Y >= float64(cfg.Hight/gridSize) {
+		head.Y <= 0 || head.Y >= float64(cfg.Height/gridSize) {
 		return true
 	}
 	return false

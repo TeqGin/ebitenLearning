@@ -8,6 +8,8 @@ import (
 	_ "image/png"
 	"os"
 
+	"github.com/hajimehoshi/ebiten/v2"
+	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
 	"github.com/nfnt/resize"
 )
 
@@ -46,4 +48,10 @@ func ResizeImage(originalImg image.Image, scalar float64) image.Image {
 	// Resize the image to the new dimensions
 	resizedImg := resize.Resize(uint(float64(size.X)*scalar), uint(float64(size.Y)*scalar), originalImg, resize.Lanczos3)
 	return resizedImg
+}
+
+func NewEbitenImangeFromFile(path string) *ebiten.Image {
+	b, _ := resource.Asset(path)
+	img, _, _ := ebitenutil.NewImageFromReader(bytes.NewReader(b))
+	return img
 }

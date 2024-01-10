@@ -24,7 +24,9 @@ go.work
 
 warGame_mac
 snakeGame_mac
+ooxx_mac
 snakeGame_linux
 warGame_linux
+ooxx_linux
 
 src/resource/data.go
