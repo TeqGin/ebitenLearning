@@ -7,6 +7,7 @@ import (
 
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
+	"github.com/hajimehoshi/ebiten/v2/inpututil"
 )
 
 type Game struct {
@@ -89,13 +90,24 @@ func (g *Game) Layout(outsideWidth int, outsideHeight int) (screenWidth int, scr
 
 // Update implements ebiten.Game.
 func (g *Game) Update() error {
+	g.MouseClickListen()
+	g.KeyBoardListen()
+
+	if winer := g.CheckWiner(); winer != 0 {
+		g.winner = winer
+		g.Reset()
+	}
+	return nil
+}
+
+func (g *Game) MouseClickListen() {
 	if ebiten.IsMouseButtonPressed(ebiten.MouseButtonLeft) && time.Since(g.lastClickInterval).Milliseconds() > 500 {
 		g.lastClickInterval = time.Now()
 		mouseClickX, mouseClickY := ebiten.CursorPosition()
 		i := mouseClickX / 200
 		j := mouseClickY / 200
 		if g.boardStatus.Pieces[i][j] != 0 {
-			return nil
+			return
 		}
 		if g.isX {
 			g.boardStatus.Pieces[i][j] = 2
@@ -104,16 +116,46 @@ func (g *Game) Update() error {
 		}
 		g.isX = !g.isX
 	}
+}
 
-	if winer := g.CheckWiner(); winer != 0 {
-		g.winner = winer
+func (g *Game) KeyBoardListen() {
+	var i, j int
+
+	if inpututil.IsKeyJustPressed(ebiten.Key9) {
+		i, j = 2, 0
+	} else if inpututil.IsKeyJustPressed(ebiten.Key8) {
+		i, j = 1, 0
+	} else if inpututil.IsKeyJustPressed(ebiten.Key7) {
+		i, j = 0, 0
+	} else if inpututil.IsKeyJustPressed(ebiten.Key6) {
+		i, j = 2, 1
+	} else if inpututil.IsKeyJustPressed(ebiten.Key5) {
+		i, j = 1, 1
+	} else if inpututil.IsKeyJustPressed(ebiten.Key4) {
+		i, j = 0, 1
+	} else if inpututil.IsKeyJustPressed(ebiten.Key3) {
+		i, j = 2, 2
+	} else if inpututil.IsKeyJustPressed(ebiten.Key2) {
+		i, j = 1, 2
+	} else if inpututil.IsKeyJustPressed(ebiten.Key1) {
+		i, j = 0, 2
+	} else if inpututil.IsKeyJustPressed(ebiten.KeyEscape) {
 		g.Reset()
+		return
+	} else {
+		return
 	}
 
-	if ebiten.IsKeyPressed(ebiten.KeyEscape) {
-		g.Reset()
+	if g.boardStatus.Pieces[i][j] != 0 {
+		return
 	}
-	return nil
+
+	if g.isX {
+		g.boardStatus.Pieces[i][j] = 2
+	} else {
+		g.boardStatus.Pieces[i][j] = 1
+	}
+	g.isX = !g.isX
 }
 
 func (g *Game) Implements() ebiten.Game {
