@@ -2,7 +2,6 @@ package game
 
 import (
 	"ebitenLearning/src/utils"
-	"fmt"
 	"time"
 
 	"github.com/hajimehoshi/ebiten/v2"
@@ -28,7 +27,6 @@ type BoardStaus struct {
 func NewGame() *Game {
 	cfg := utils.LoadConfig("resource/ooxx/config.json")
 	ebiten.SetWindowSize(cfg.Width, cfg.Height)
-	fmt.Println(cfg)
 	return &Game{
 		cfg:      cfg,
 		boardImg: utils.NewEbitenImangeFromFile("resource/ooxx/elements/board.png"),
@@ -121,23 +119,23 @@ func (g *Game) MouseClickListen() {
 func (g *Game) KeyBoardListen() {
 	var i, j int
 
-	if inpututil.IsKeyJustPressed(ebiten.Key9) {
+	if inpututil.IsKeyJustPressed(ebiten.KeyE) {
 		i, j = 2, 0
-	} else if inpututil.IsKeyJustPressed(ebiten.Key8) {
+	} else if inpututil.IsKeyJustPressed(ebiten.KeyW) {
 		i, j = 1, 0
-	} else if inpututil.IsKeyJustPressed(ebiten.Key7) {
+	} else if inpututil.IsKeyJustPressed(ebiten.KeyQ) {
 		i, j = 0, 0
-	} else if inpututil.IsKeyJustPressed(ebiten.Key6) {
+	} else if inpututil.IsKeyJustPressed(ebiten.KeyD) {
 		i, j = 2, 1
-	} else if inpututil.IsKeyJustPressed(ebiten.Key5) {
+	} else if inpututil.IsKeyJustPressed(ebiten.KeyS) {
 		i, j = 1, 1
-	} else if inpututil.IsKeyJustPressed(ebiten.Key4) {
+	} else if inpututil.IsKeyJustPressed(ebiten.KeyA) {
 		i, j = 0, 1
-	} else if inpututil.IsKeyJustPressed(ebiten.Key3) {
+	} else if inpututil.IsKeyJustPressed(ebiten.KeyC) {
 		i, j = 2, 2
-	} else if inpututil.IsKeyJustPressed(ebiten.Key2) {
+	} else if inpututil.IsKeyJustPressed(ebiten.KeyX) {
 		i, j = 1, 2
-	} else if inpututil.IsKeyJustPressed(ebiten.Key1) {
+	} else if inpututil.IsKeyJustPressed(ebiten.KeyZ) {
 		i, j = 0, 2
 	} else if inpututil.IsKeyJustPressed(ebiten.KeyEscape) {
 		g.Reset()
